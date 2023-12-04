@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "yarn run watch & next dev",
+    "dev": "next dev",
     "build": "prisma generate & next build",
     "analyze": "ANALYZE=true next build",
     "start": "next start",
