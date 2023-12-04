@@ -5,30 +5,35 @@ import { TextInput, Button, Stack, Select, Flex } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
-import { Role } from '@prisma/client';
+import { Role, profiles } from '@prisma/client';
 import { ProfileFormSchema, ProfileFormType } from '@/types/schema/profile';
 import { generateDataListFromEnum } from '@/helpers/generateDataListFromEnum';
-import { createProfile } from '../../actions';
+import { createProfile, updateProfile } from '../../actions';
 import { getErrorMessage } from '@/helpers/getErrorMessage';
+
+type ProfileFormProps = {
+  profile?: profiles;
+};
 
 const initialLoginFormData: ProfileFormType = {
   name: '',
   role: Role.BAND,
 };
 
-export function ProfileForm() {
+export function ProfileForm({ profile }: ProfileFormProps) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const form = useForm({
     validateInputOnChange: true,
-    initialValues: initialLoginFormData,
+    initialValues: profile || initialLoginFormData,
     validate: zodResolver(ProfileFormSchema),
   });
 
   const handleProfile = form.onSubmit((values) => {
     startTransition(async () => {
+      const submitAction = profile ? updateProfile : createProfile;
       try {
-        await createProfile(values);
+        await submitAction(values);
         router.refresh();
       } catch (error) {
         notifications.show({ title: 'Error', message: getErrorMessage(error), color: 'red' });
@@ -59,7 +64,7 @@ export function ProfileForm() {
           disabled={!form.isValid()}
           loading={isPending}
         >
-          Create profile
+          {profile ? 'Update profile' : 'Create profile'}
         </Button>
       </Flex>
     </form>

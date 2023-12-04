@@ -16,6 +16,7 @@ export default async function Profile() {
   return (
     <Stack>
       <Title>Profile</Title>
+      <ProfileForm profile={profile} />
     </Stack>
   );
 }

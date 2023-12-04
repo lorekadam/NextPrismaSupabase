@@ -28,3 +28,16 @@ export const createProfile = async (profile: ProfileFormType) => {
     throw new Error("Couldn't create profile");
   }
 };
+
+export const updateProfile = async (profile: ProfileFormType) => {
+  const user_id = await getUserId();
+  try {
+    await prisma.profiles.update({
+      where: { user_id },
+      data: profile,
+    });
+  } catch (error) {
+    console.log(error);
+    throw new Error("Couldn't update profile");
+  }
+};
