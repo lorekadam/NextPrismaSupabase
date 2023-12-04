@@ -5,14 +5,14 @@ import { TextInput, Button, Stack, Select, Flex } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
-import { Role, profiles } from '@prisma/client';
+import { Profile, Role } from '@prisma/client';
 import { ProfileFormSchema, ProfileFormType } from '@/types/schema/profile';
 import { generateDataListFromEnum } from '@/helpers/generateDataListFromEnum';
 import { createProfile, updateProfile } from '../../actions';
 import { getErrorMessage } from '@/helpers/getErrorMessage';
 
 type ProfileFormProps = {
-  profile?: profiles;
+  profile?: Profile;
 };
 
 const initialLoginFormData: ProfileFormType = {

@@ -8,7 +8,7 @@ import { ProfileFormType } from '@/types/schema/profile';
 
 export const getProfile = async () => {
   const user_id = await getUserId();
-  const profile = await prisma.profiles.findUnique({ where: { user_id } });
+  const profile = await prisma.profile.findUnique({ where: { user_id } });
   return profile;
 };
 
@@ -22,7 +22,7 @@ export const checkProfileAndRedirectIfNot = async () => {
 export const createProfile = async (profile: ProfileFormType) => {
   const user_id = await getUserId();
   try {
-    await prisma.profiles.create({ data: { ...profile, user_id } });
+    await prisma.profile.create({ data: { ...profile, user_id } });
   } catch (error) {
     console.log(error);
     throw new Error("Couldn't create profile");
@@ -32,7 +32,7 @@ export const createProfile = async (profile: ProfileFormType) => {
 export const updateProfile = async (profile: ProfileFormType) => {
   const user_id = await getUserId();
   try {
-    await prisma.profiles.update({
+    await prisma.profile.update({
       where: { user_id },
       data: profile,
     });
