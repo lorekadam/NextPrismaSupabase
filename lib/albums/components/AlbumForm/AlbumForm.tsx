@@ -1,28 +1,30 @@
 'use client';
 
 import { useForm, zodResolver } from '@mantine/form';
-import { TextInput, Button, Stack, Flex, NumberInput } from '@mantine/core';
+import { TextInput, Button, Stack, Flex, NumberInput, MultiSelect } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
-import { Album } from '@prisma/client';
+import { Category } from '@prisma/client';
 import { getErrorMessage } from '@/helpers/getErrorMessage';
 import { AlbumFormSchema, AlbumFormType, MAX_YEAR, MIN_YEAR } from '@/types/schema/albums';
-import { createAlbum, updateAlbum } from '../../actions';
+import { AlbumWithAuthorAndCategories, createAlbum, updateAlbum } from '../../actions';
 import { buildLink } from '@/helpers/buildLink';
 import { Routes } from '@/routes';
 
 type AlbumFormProps = {
-  album?: Album;
+  album?: AlbumWithAuthorAndCategories;
+  categories: Category[];
 };
 
 const initialAlbumFormData: AlbumFormType = {
   name: '',
   tracks: 10,
   year: 2020,
+  categories: [],
 };
 
-export function AlbumForm({ album }: AlbumFormProps) {
+export function AlbumForm({ album, categories }: AlbumFormProps) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const form = useForm({
@@ -58,6 +60,11 @@ export function AlbumForm({ album }: AlbumFormProps) {
           min={MIN_YEAR}
           max={MAX_YEAR}
           {...form.getInputProps('year')}
+        />
+        <MultiSelect
+          label="Categories"
+          data={categories.map((category) => ({ value: category.id, label: category.name }))}
+          {...form.getInputProps('categories')}
         />
       </Stack>
 

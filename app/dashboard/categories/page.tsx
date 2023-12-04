@@ -1,13 +1,17 @@
 import { Stack, Title } from '@mantine/core';
-import { AlbumForm } from '@/lib/albums/components';
 import { getAllCategories } from '@/lib/categories/actions';
+import { CategoryTile } from '@/lib/categories/components';
 
 export default async function Albums() {
   const categories = await getAllCategories();
   return (
     <Stack>
-      <Title>New album</Title>
-      <AlbumForm categories={categories} />
+      <Title>Categories</Title>
+      <Stack>
+        {categories.map((category) => (
+          <CategoryTile key={category.id} category={category} />
+        ))}
+      </Stack>
     </Stack>
   );
 }

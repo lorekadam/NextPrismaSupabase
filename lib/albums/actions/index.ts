@@ -5,13 +5,16 @@ import { prisma } from '@/prisma';
 import { AlbumFormType } from '@/types/schema/albums';
 import { getProfile } from '@/lib/profile/actions';
 
-export const createAlbum = async (albumDetails: AlbumFormType) => {
+export const createAlbum = async ({ categories, ...rest }: AlbumFormType) => {
   const profile = await getProfile();
   if (profile) {
     try {
       const album = await prisma.album.create({
         data: {
-          ...albumDetails,
+          ...rest,
+          categories: {
+            connect: categories.map((category) => ({ id: category })),
+          },
           author_id: profile.id,
         },
       });
@@ -24,7 +27,7 @@ export const createAlbum = async (albumDetails: AlbumFormType) => {
   throw new Error('Profile not found');
 };
 
-export const updateAlbum = async (albumId: string, albumDetails: AlbumFormType) => {
+export const updateAlbum = async (albumId: string, { categories, ...rest }: AlbumFormType) => {
   const profile = await getProfile();
   if (profile) {
     try {
@@ -33,7 +36,10 @@ export const updateAlbum = async (albumId: string, albumDetails: AlbumFormType) 
           id: albumId,
         },
         data: {
-          ...albumDetails,
+          ...rest,
+          categories: {
+            connect: categories.map((category) => ({ id: category })),
+          },
           author_id: profile.id,
         },
       });
@@ -63,9 +69,9 @@ export const getAlbumDetails = async (albumId: string) => {
   }
 };
 
-export const getAlbumsWithAuthors = async () => {
+export const getAlbumsWithAuthorsAndCategories = async () => {
   try {
-    const albums = await prisma.album.findMany({ include: { author: true } });
+    const albums = await prisma.album.findMany({ include: { author: true, categories: true } });
     return albums;
   } catch (error) {
     console.log(error);
@@ -73,5 +79,7 @@ export const getAlbumsWithAuthors = async () => {
   }
 };
 
-export type AlbumsWithAuthor = Prisma.PromiseReturnType<typeof getAlbumsWithAuthors>;
-export type AlbumWithAuthor = AlbumsWithAuthor[0];
+export type AlbumsWithAuthorAndCategories = Prisma.PromiseReturnType<
+  typeof getAlbumsWithAuthorsAndCategories
+>;
+export type AlbumWithAuthorAndCategories = AlbumsWithAuthorAndCategories[0];

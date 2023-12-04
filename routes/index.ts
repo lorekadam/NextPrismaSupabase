@@ -7,4 +7,6 @@ export enum Routes {
   albums = '/dashboard/albums',
   new_album = '/dashboard/albums/new',
   album = '/dashboard/albums/{albumId}',
+  categories = '/dashboard/categories',
+  new_category = '/dashboard/categories/new',
 }

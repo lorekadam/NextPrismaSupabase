@@ -1,6 +1,13 @@
 'use client';
 
-import { IconCirclePlus, IconDashboard, IconDisc, IconUser } from '@tabler/icons-react';
+import {
+  IconCategory2,
+  IconCategoryPlus,
+  IconCirclePlus,
+  IconDashboard,
+  IconDisc,
+  IconUser,
+} from '@tabler/icons-react';
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -12,6 +19,8 @@ const links = [
   { href: Routes.profile, label: 'Profile', icon: IconUser },
   { href: Routes.albums, label: 'Albums', icon: IconDisc },
   { href: Routes.new_album, label: 'New album', icon: IconCirclePlus },
+  { href: Routes.categories, label: 'Categories', icon: IconCategory2 },
+  { href: Routes.new_category, label: 'New category', icon: IconCategoryPlus },
 ];
 
 export const SidebarLinks = () => {
