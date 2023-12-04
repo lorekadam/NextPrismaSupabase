@@ -21,13 +21,13 @@ model Profile {
     name       String
     created_at DateTime @default(now())
     updated_at DateTime @default(now()) @updatedAt
-    albums     Album?
+    albums     Album[]
 }
 
 model Album {
     id         String   @id @default(uuid())
     author     Profile  @relation(fields: [author_id], references: [id])
-    author_id  String   @unique
+    author_id  String
     name       String
     tracks     Int
     year       Int

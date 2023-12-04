@@ -1,6 +1,6 @@
 'use client';
 
-import { IconDashboard, IconUser } from '@tabler/icons-react';
+import { IconCirclePlus, IconDashboard, IconDisc, IconUser } from '@tabler/icons-react';
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -10,6 +10,8 @@ import classes from './SidebarLinks.module.css';
 const links = [
   { href: Routes.dashboard, label: 'Dashboard', icon: IconDashboard },
   { href: Routes.profile, label: 'Profile', icon: IconUser },
+  { href: Routes.albums, label: 'Albums', icon: IconDisc },
+  { href: Routes.new_album, label: 'New album', icon: IconCirclePlus },
 ];
 
 export const SidebarLinks = () => {
