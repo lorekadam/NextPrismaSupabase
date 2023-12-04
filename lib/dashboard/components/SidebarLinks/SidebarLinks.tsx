@@ -1,13 +1,16 @@
 'use client';
 
-import { IconDashboard } from '@tabler/icons-react';
+import { IconDashboard, IconUser } from '@tabler/icons-react';
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Routes } from '@/routes';
 import classes from './SidebarLinks.module.css';
 
-const links = [{ href: Routes.dashboard, label: 'Dashboard', icon: IconDashboard }];
+const links = [
+  { href: Routes.dashboard, label: 'Dashboard', icon: IconDashboard },
+  { href: Routes.profile, label: 'Profile', icon: IconUser },
+];
 
 export const SidebarLinks = () => {
   const pathname = usePathname();
