@@ -1,0 +1,5 @@
+.wrapper main {
+  width: calc(100% - rem(300px));
+  height: 100vh;
+  overflow: auto;
+}
