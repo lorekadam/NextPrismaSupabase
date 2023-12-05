@@ -7,3 +7,38 @@ datasource db {
     url       = env("DATABASE_URL")
     directUrl = env("DIRECT_URL")
 }
+
+enum Role {
+    BAND
+    SINGER
+}
+
+model Profile {
+    id         String   @id @default(uuid())
+    user_id    String   @unique @db.Uuid
+    role       Role
+    name       String
+    created_at DateTime @default(now())
+    updated_at DateTime @default(now()) @updatedAt
+    albums     Album[]
+}
+
+model Album {
+    id         String     @id @default(uuid())
+    author     Profile    @relation(fields: [author_id], references: [id])
+    author_id  String
+    name       String
+    tracks     Int
+    year       Int
+    created_at DateTime   @default(now())
+    updated_at DateTime   @default(now()) @updatedAt
+    categories Category[]
+}
+
+model Category {
+    id         String   @id @default(uuid())
+    name       String   @unique
+    albums     Album[]
+    created_at DateTime @default(now())
+    updated_at DateTime @default(now()) @updatedAt
+}
