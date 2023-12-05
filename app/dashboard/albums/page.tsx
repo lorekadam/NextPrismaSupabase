@@ -1,9 +1,9 @@
 import { Stack, Title } from '@mantine/core';
-import { getAlbumsWithAuthors } from '@/lib/albums/actions';
+import { getAlbumsWithAuthorsAndCategories } from '@/lib/albums/actions';
 import { AlbumTile } from '@/lib/albums/components';
 
 export default async function Albums() {
-  const albums = await getAlbumsWithAuthors();
+  const albums = await getAlbumsWithAuthorsAndCategories();
   return (
     <Stack>
       <Title>Albums</Title>

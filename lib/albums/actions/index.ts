@@ -1,9 +1,12 @@
 'use server';
 
 import { Prisma } from '@prisma/client';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { prisma } from '@/prisma';
 import { AlbumFormType } from '@/types/schema/albums';
 import { getProfile } from '@/lib/profile/actions';
+import { Routes } from '@/routes';
 
 export const createAlbum = async ({ categories, ...rest }: AlbumFormType) => {
   const profile = await getProfile();
@@ -18,6 +21,7 @@ export const createAlbum = async ({ categories, ...rest }: AlbumFormType) => {
           author_id: profile.id,
         },
       });
+      revalidatePath(Routes.albums);
       return album;
     } catch (error) {
       console.log(error);
@@ -79,7 +83,42 @@ export const getAlbumsWithAuthorsAndCategories = async () => {
   }
 };
 
+export const getAlbumWithAuthorsAndCategories = async (id: string) => {
+  try {
+    const albums = await prisma.album.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        author: true,
+        categories: true,
+      },
+    });
+    return albums;
+  } catch (error) {
+    console.log(error);
+    throw new Error('Could not get albums');
+  }
+};
+
 export type AlbumsWithAuthorAndCategories = Prisma.PromiseReturnType<
   typeof getAlbumsWithAuthorsAndCategories
 >;
-export type AlbumWithAuthorAndCategories = AlbumsWithAuthorAndCategories[0];
+export type AlbumWithAuthorAndCategories = Prisma.PromiseReturnType<
+  typeof getAlbumWithAuthorsAndCategories
+>;
+
+export const deleteAlbum = async (id: string) => {
+  try {
+    await prisma.album.delete({
+      where: {
+        id,
+      },
+    });
+    revalidatePath(Routes.albums);
+  } catch (error) {
+    console.log(error);
+    throw new Error('Could not delete album');
+  }
+  redirect(Routes.albums);
+};

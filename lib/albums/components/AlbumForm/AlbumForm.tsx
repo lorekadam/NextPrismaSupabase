@@ -17,19 +17,19 @@ type AlbumFormProps = {
   categories: Category[];
 };
 
-const initialAlbumFormData: AlbumFormType = {
-  name: '',
-  tracks: 10,
-  year: 2020,
-  categories: [],
-};
+const initialAlbumFormData = (album?: AlbumFormProps['album']): AlbumFormType => ({
+  name: album?.name || '',
+  tracks: album?.tracks || 10,
+  year: album?.year || 2020,
+  categories: album?.categories.map((category) => category.id) || [],
+});
 
 export function AlbumForm({ album, categories }: AlbumFormProps) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const form = useForm({
     validateInputOnChange: true,
-    initialValues: album || initialAlbumFormData,
+    initialValues: initialAlbumFormData(album),
     validate: zodResolver(AlbumFormSchema),
   });
 
@@ -38,7 +38,7 @@ export function AlbumForm({ album, categories }: AlbumFormProps) {
       try {
         if (album) {
           await updateAlbum(album.id, values);
-          router.refresh();
+          router.push(buildLink(Routes.album, album.id));
         } else {
           const newAlbum = await createAlbum(values);
           router.push(buildLink(Routes.album, newAlbum.id));

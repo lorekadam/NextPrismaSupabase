@@ -3,15 +3,17 @@
 import { Avatar, Button, Card, Flex, Group, Stack, Text, Title } from '@mantine/core';
 import React from 'react';
 import Link from 'next/link';
-import { AlbumWithAuthor } from '../../actions';
 import { buildLink } from '@/helpers/buildLink';
 import { Routes } from '@/routes';
+import { AlbumWithAuthorAndCategories } from '../../actions';
 
 type AlbumTileProps = {
-  album: AlbumWithAuthor;
+  album: AlbumWithAuthorAndCategories;
 };
 
-export const AlbumTile = ({ album: { id, name, tracks, year, author } }: AlbumTileProps) => (
+export const AlbumTile = ({
+  album: { id, name, tracks, year, author, categories },
+}: AlbumTileProps) => (
   <Card shadow="md">
     <Stack>
       <Group>
@@ -34,6 +36,12 @@ export const AlbumTile = ({ album: { id, name, tracks, year, author } }: AlbumTi
             <Text fw="bold">Release year</Text>
             <Text>{year}</Text>
           </Group>
+          {categories.length > 0 && (
+            <Group>
+              <Text fw="bold">Categories:</Text>
+              <Text>{categories.map((category) => category.name).join(', ')}</Text>
+            </Group>
+          )}
         </Stack>
         <Flex align="flex-end">
           <Button component={Link} href={buildLink(Routes.album, id)}>
