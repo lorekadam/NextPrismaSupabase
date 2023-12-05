@@ -47,6 +47,7 @@ export const updateAlbum = async (albumId: string, { categories, ...rest }: Albu
           author_id: profile.id,
         },
       });
+      revalidatePath(Routes.albums);
       return album;
     } catch (error) {
       console.log(error);
